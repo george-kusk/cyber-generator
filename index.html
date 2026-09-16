@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>CYBERPUNK VECTOR GEN v6.0</title>
+    <style>
+        body {
+            background-color: #0a0a0f; color: #00ffcc; text-align: center;
+            font-family: 'Courier New', monospace; padding-top: 40px; margin: 0;
+            background-image: linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        h1 { color: #ff0055; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 10px #ff0055; margin-bottom: 30px; }
+        .control-panel { background: rgba(16, 16, 24, 0.9); border: 2px solid #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); border-radius: 8px; display: inline-block; padding: 25px; text-align: left; min-width: 450px; margin-bottom: 20px; }
+        .control-group { margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .shape-selector { display: flex; gap: 10px; }
+        .shape-option { cursor: pointer; border: 1px solid #00ffcc; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase; }
+        input[type="radio"] { display: none; }
+        input[type="radio"]:checked + .shape-option { background: #00ffcc; color: #0a0a0f; box-shadow: 0 0 8px #00ffcc; font-weight: bold; }
+        input[type="range"] { -webkit-appearance: none; width: 160px; background: #1a1a26; height: 6px; border: 1px solid rgba(0, 255, 204, 0.3); }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #00ffcc; box-shadow: 0 0 6px #00ffcc; cursor: pointer; }
+        #download-btn { width: 100%; margin-top: 15px; padding: 10px; background: transparent; color: #ff0055; border: 2px solid #ff0055; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        #download-btn:hover { background: #ff0055; color: #0a0a0f; box-shadow: 0 0 15px #ff0055; }
+        #canvas { display: inline-block; background: #050508; border: 1px solid rgba(0, 255, 204, 0.15); box-shadow: 0 0 20px rgba(0,0,0,0.5); line-height: 0; }
+    </style>
+</head>
+<body>
+
+    <h1>SYSTEM.GEOMETRY.GEN //</h1>
+
+    <div class="control-panel">
+        <div class="control-group">
+            <label>ГЕОМЕТРИЯ</label>
+            <div class="shape-selector">
+                <label><input type="radio" name="shape" value="circle" checked><span class="shape-option">Круг</span></label>
+                <label><input type="radio" name="shape" value="square"><span class="shape-option">Квадрат</span></label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>Количество линий</label>
+            <input type="range" id="lines" min="5" max="40" value="15">
+        </div>
+        <div class="control-group">
+            <label>Расстояние (шаг)</label>
+            <input type="range" id="step" min="2" max="20" value="6">
+        </div>
+        <div class="control-group">
+            <label>Толщина контура</label>
+            <input type="range" id="width" min="1" max="10" value="1">
+        </div>
+        <button id="download-btn">💾 EXPORT SVG</button>
+    </div>
+    <br>
+    <div id="canvas"></div>
+
+    <script>
+        let svgStr = "";
+        function draw() {
+            const size = 500, c = size / 2;
+            const lines = document.getElementById('lines').value;
+            const step = document.getElementById('step').value;
+            const thick = document.getElementById('width').value;
+            const shape = document.querySelector('input[name="shape"]:checked').value;
+            
+            let color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+            svgStr = `<svg width="${size}" height="${size}" xmlns="http://w3.org">`;
+
+            for (let i = 1; i <= lines; i++) {
+                let r = i * step;
+                if (shape === "circle") {
+                    svgStr += `<circle cx="${c}" cy="${c}" r="${r}" stroke="${color}" stroke-width="${thick}" fill="none"/>`;
+                } else {
+                    svgStr += `<rect x="${c-r}" y="${c-r}" width="${r*2}" height="${r*2}" stroke="${color}" stroke-width="${thick}" fill="none"/>`;
+                }
+            }
+            svgStr += `</svg>`;
+            document.getElementById('canvas').innerHTML = svgStr;
+        }
+
+        document.querySelectorAll('input').forEach(el => el.addEventListener('input', draw));
+        document.querySelectorAll('input[name="shape"]').forEach(el => el.addEventListener('change', draw));
+        
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const blob = new Blob([svgStr], { type: "image/svg+xml" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "vector.svg";
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        });
+
+        draw();
+    </script>
+</body>
+</html>

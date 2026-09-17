@@ -4,19 +4,111 @@
     <meta charset="UTF-8">
     <title>CYBERPUNK VECTOR GEN v6.0</title>
     <style>
-                body {
-            background-image: url('bg.png'); /* Если у вас файл .jpg, замените на bg.jpg */
+        body {
+            /* Затемняющий слой поверх плит, чтобы они ушли на красивый задний план */
+            background-image: 
+                linear-gradient(rgba(10, 10, 12, 0.93), rgba(10, 10, 12, 0.93)), 
+                url('bg.png'); 
+            
             background-repeat: repeat;
-            background-size: 400px 400px;
+            background-attachment: fixed;
+            background-size: 380px auto;
+            
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: #00ffcc;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            padding-top: 40px;
+            background-color: #0a0a0c;
             margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        #download-btn:hover { background: #ff0055; color: #0a0a0f; box-shadow: 0 0 15px #ff0055; }
-        #canvas { display: inline-block; background: #050508; border: 1px solid rgba(0, 255, 204, 0.15); box-shadow: 0 0 20px rgba(0,0,0,0.5); line-height: 0; }
+        /* Неоновый sci-fi заголовок */
+        h1 {
+            color: #00ffcc !important;
+            text-shadow: 0 0 12px rgba(0, 255, 204, 0.6);
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        /* Матовая панель управления (эффект матового стекла) */
+        .control-panel {
+            background: rgba(15, 15, 20, 0.85) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 204, 0.25);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 320px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Контрастный белый текст для подписей (ползунков) */
+        .control-group label {
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .shape-selector {
+            display: flex;
+            gap: 20px;
+            margin-top: 4px;
+        }
+
+        .shape-selector label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ffffff !important;
+            cursor: pointer;
+        }
+
+        /* Индустриальная кнопка EXPORT */
+        #download-btn {
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        #download-btn:hover {
+            background: #00ffcc;
+            color: #0a0a0f;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+        }
+
+        /* Окно холста генератора */
+        #canvas {
+            display: inline-block;
+            background: #050508;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 35px rgba(0,0,0,0.7);
+            line-height: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +137,7 @@
         </div>
         <button id="download-btn">💾 EXPORT SVG</button>
     </div>
-    <br>
+
     <div id="canvas"></div>
 
     <script>
